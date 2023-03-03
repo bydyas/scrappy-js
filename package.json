@@ -1,0 +1,29 @@
+{
+  "name": "scrappy",
+  "description": "Console application based on Gram.js to scrap Telegram entities. ",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bydyas/scrappy-js.git"
+  },
+  "keywords": [
+    "telegram",
+    "scraper"
+  ],
+  "author": "bydyas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bydyas/scrappy-js/issues"
+  },
+  "homepage": "https://github.com/bydyas/scrappy-js#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "input": "^1.0.1",
+    "inquirer": "^9.1.4",
+    "telegram": "^2.15.10"
+  }
+}

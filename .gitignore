@@ -1,3 +1,7 @@
+# Local files
+.idea/
+my_session/
+
 # Logs
 logs
 *.log
