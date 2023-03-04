@@ -5,7 +5,7 @@ const os = require("os")
 
 const apiId = +process.env.SCRAPPY_APP_ID
 const apiHash = process.env.SCRAPPY_API_HASH;
-const storeSession = new StoreSession('my_session');
+const storeSession = new StoreSession('./my_session');
 
 const client_options = {
     deviceModel: `TEST@${os.hostname()}`,
