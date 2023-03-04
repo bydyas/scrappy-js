@@ -1,7 +1,7 @@
 const { Api } = require("telegram");
 const { client } = require("../authentication");
 const input = require("input");
-const clipboard = require("node-clipboardy");
+const ncp = require("copy-paste");
 
 module.exports = getIdByUsername = async () => {
     await client.connect();
@@ -15,10 +15,9 @@ module.exports = getIdByUsername = async () => {
                 id: username.toString(),
             }));
         id = Number(fullUser.id);
-        clipboard.writeSync(id.toString());
-        console.log(`${username} : ${id} [скопійовано]`);
+        ncp.copy(id, () => console.log(`${username} : ${id} [скопійовано]`));
     } catch (e) {
-        console.log("Не існує користувача з таким тегом! Спробуйте інший");
+        console.log("Не існує користувача з таким тегом!\nМожливо, тег використовує як латиницю, так і кирилицю.\nСпробуйте ще раз...");
     }
 
     return id;

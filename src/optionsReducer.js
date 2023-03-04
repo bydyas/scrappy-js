@@ -9,8 +9,11 @@ const optionsReducer = async (option) => {
             await getIdByUsername()
             await callOptionsReducer(true);
             break;
-        case optionChoices[optionChoices.length-1]:
+        case optionChoices[optionChoices.length-2]:
             await logOut();
+            break;
+        case optionChoices[optionChoices.length-1]:
+            process.exit();
             break;
         default:
             throw new Error("Invalid option");
