@@ -1,6 +1,7 @@
 # Local files
 .idea/
 my_session/
+*.exe
 
 # Logs
 logs
