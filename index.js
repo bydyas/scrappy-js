@@ -1,13 +1,11 @@
 require("dotenv").config();
 const { authorize } = require("./src/authentication");
-const promptOptions = require("./src/prompts/options");
-const optionsReducer = require("./src/optionsReducer");
+const { callOptionsReducer } = require("./src/optionsReducer");
 
 (async () => {
    try {
        await authorize();
-       const { option } = await promptOptions();
-       await optionsReducer(option);
+       await callOptionsReducer();
    } catch (e) {
        console.log(e);
    }
