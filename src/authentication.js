@@ -8,7 +8,7 @@ const apiHash = process.env.SCRAPPY_API_HASH;
 const storeSession = new StoreSession('./my_session');
 
 const client_options = {
-    deviceModel: `TEST@${os.hostname()}`,
+    deviceModel: `SCRAPPY@${os.hostname()}`,
     systemVersion: os.version() || "Unknown node",
     appVersion: "1.1.1",
     useWSS: true,
