@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { authorize } = require("./src/authentication");
-const { callOptionsReducer } = require("./src/optionsReducer");
+const { callOptionsReducer } = require("./src/reducers/optionsReducer");
 
 (async () => {
    try {

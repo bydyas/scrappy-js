@@ -6,4 +6,13 @@ const optionChoices = [
     "Вийти"
 ];
 
-module.exports = { optionChoices };
+const getIdChoices = [
+    "Одного користувача (потрібен його тег)",
+    "Перелік користувачів (потрібен файл usernames.txt)"
+];
+
+const FILE_NAMES = {
+    "ID_READ": "usernames.txt",
+    "ID_WRITE": "IDs.txt"
+}
+module.exports = { optionChoices, getIdChoices, FILE_NAMES };
