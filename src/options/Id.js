@@ -38,7 +38,7 @@ class Id {
                 } catch (e) {
                     id = "НЕМА";
                 }
-                username_id_data.push([username, id].join(":"));
+                username_id_data.push([id,username].join(" | @"));
             }
 
             await writeFile(FILE_NAMES.ID_WRITE, username_id_data.join("\r\n"));

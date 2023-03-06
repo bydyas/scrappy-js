@@ -7,7 +7,7 @@ const optionsReducer = async (option) => {
     switch (option) {
         case optionChoices[0]:
             await getIdReducer();
-            await callOptionsReducer(true);
+            await callOptionsReducer(true, 2500);
             break;
         case optionChoices[optionChoices.length-2]:
             await logOut();
