@@ -6,7 +6,7 @@ const { readFile, writeFile } = require("../helpers");
 const { FILE_NAMES } = require("../utils/consts");
 
 class Id {
-    async #getId(username) {
+    async get(username) {
         await client.connect();
         const { fullUser } = await client.invoke(
             new Api.users.GetFullUser({
@@ -19,7 +19,7 @@ class Id {
     async getOne() {
         const username = await input.text("Введіть тег користувача: @");
         try {
-            const id = await this.#getId(username);
+            const id = await this.get(username);
             ncp.copy(id, () => console.log(`${username} : ${id} [скопійовано]`));
         } catch (e) {
             console.log((`Не існує користувача з таким тегом (${username})!\nМожливо, тег використовує як латиницю, так і кирилицю. Спробуйте ще раз...`));
@@ -34,7 +34,7 @@ class Id {
             for (let username of usernames) {
                 let id = undefined;
                 try {
-                    id = await this.#getId(username);
+                    id = await this.get(username);
                 } catch (e) {
                     id = "НЕМА";
                 }
