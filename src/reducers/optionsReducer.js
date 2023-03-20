@@ -2,12 +2,17 @@ const { optionChoices } = require("../utils/consts");
 const promptOptions = require("../prompts/options.prompt");
 const logOut = require("../options/logOut");
 const getIdReducer = require("./getIdReducer");
+const Group = require("../options/Group");
 
 const optionsReducer = async (option) => {
     switch (option) {
         case optionChoices[0]:
             await getIdReducer();
             await callOptionsReducer(true, 2500);
+            break;
+        case optionChoices[1]:
+            await Group.getMembers();
+            await callOptionsReducer(true);
             break;
         case optionChoices[optionChoices.length-2]:
             await logOut();
