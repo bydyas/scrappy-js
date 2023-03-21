@@ -11,7 +11,7 @@ class ChannelParticipantsError {
                 console.log("Ви повинні бути адміністратором цього чату, щоб зробити це.");
                 break;
             default:
-                throw new Error("Невідом помилк");
+                throw new Error(type);
         }
     }
 }

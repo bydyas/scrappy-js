@@ -18,4 +18,15 @@ const writeFile = async (filename, content) => {
     }
 }
 
-module.exports = { readFile, writeFile }
+const getHashFromInviteLink = (link) => {
+    const regex = /(t.me\/\+|t.me\/joinchat\/)([a-zA-Z0-9_-]+)/;
+    const match = link.match(regex);
+
+    if (match) {
+        return match[2];
+    } else {
+        return null;
+    }
+}
+
+module.exports = { readFile, writeFile, getHashFromInviteLink }

@@ -13,9 +13,10 @@ const getIdChoices = [
 ];
 
 const FILE_NAMES = {
+    "prefix": "@scrappy",
     "ID_READ": "usernames.txt",
-    "ID_WRITE": "IDs.txt",
-    "GROUP_MEMBERS": "members.txt",
-    "GROUP_MSG": "messages.txt"
+    "ID_WRITE": `IDs${this.prefix}.txt`,
+    "GROUP_MEMBERS": `members${this.prefix}.txt`,
+    "GROUP_MSG": `messages${this.prefix}.txt`
 }
 module.exports = { optionChoices, getIdChoices, FILE_NAMES };
