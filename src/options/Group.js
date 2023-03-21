@@ -2,20 +2,29 @@ const { client } = require("../authentication");
 const input = require("input");
 const { writeFile } = require("../helpers");
 const { FILE_NAMES } = require("../utils/consts");
-const Id = require("./Id");
+const ChannelParticipantsError = require("../errors/channelParticipantsError");
 
 class Group {
     async getMembers() {
-        const entity = await input.text("Введіть посилання на групу: ");
-        try {
-            let result = await client.getParticipants(entity.toString());
-            result = result.map(user => [ Number(user.id), user.username ].join(" | @"));
-            result.unshift(entity.toString());
+        const group = await input.text("Введіть посилання на групу: ");
+        const members = [group.toString()];
 
-            await writeFile(FILE_NAMES.GROUP_MEMBERS, result.join("\r\n"));
+        try {
+            for await (const user of client.iterParticipants(group.toString())){
+                members.push([
+                    "ID: "+ Number(user.id),
+                    "@" + user.username,
+                    "ІМ*Я: " + user.firstName,
+                    "ПРІЗВИЩЕ: " + user.lastName,
+                    "МОБ: " + user.phone,
+                    "ЦЕ БОТ?: " + user.bot
+                ].join(" | "));
+            }
+
+            await writeFile(FILE_NAMES.GROUP_MEMBERS, members.join("\r\n"));
             console.log(`Можете переглянути учасників групи у файлі ${FILE_NAMES.GROUP_MEMBERS}`);
-        } catch (e) {
-            console.log("Упс..Групу не знайдено");
+        } catch (error) {
+            ChannelParticipantsError.handle(error.errorMessage);
         }
     }
 

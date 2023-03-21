@@ -8,7 +8,8 @@ const optionChoices = [
 
 const getIdChoices = [
     "Одного користувача (потрібен його тег)",
-    "Перелік користувачів (потрібен файл usernames.txt)"
+    "Перелік користувачів (потрібен файл usernames.txt)",
+    "Повернутися"
 ];
 
 const FILE_NAMES = {

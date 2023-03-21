@@ -11,6 +11,8 @@ module.exports = getIdReducer = async () => {
         case getIdChoices[1]:
             await Id.getMany();
             break;
+        case getIdChoices[getIdChoices.length-1]:
+            break;
         default:
             break;
     }
