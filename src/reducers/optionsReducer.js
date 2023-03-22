@@ -18,6 +18,10 @@ const optionsReducer = async (option) => {
             await Group.getMessages();
             await callOptionsReducer(true);
             break;
+        case optionChoices[3]:
+            await Group.getList();
+            await callOptionsReducer(true);
+            break;
         case optionChoices[optionChoices.length-2]:
             await logOut();
             break;

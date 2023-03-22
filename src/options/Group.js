@@ -18,6 +18,27 @@ class Group {
         }
     }
 
+    async getList() {
+        const list = [];
+
+        try {
+            for await (const dialog of client.iterDialogs({})){
+                if (!dialog.entity.left & dialog.entity.participantsCount > 0 & dialog.isGroup) {
+                    list.push([
+                        "ID: " + dialog.id,
+                        "НАЗВА: " + dialog.title,
+                        "ЛЮДІ: " + dialog.entity.participantsCount
+                    ].join(" | "));
+                }
+            }
+
+            await writeFile(FILE_NAMES.GROUP_LIST, list.join("\r\n"));
+            console.log(`Можете переглянути перелік груп у файлі ${FILE_NAMES.GROUP_LIST}`);
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     async getMembers() {
         const chat = await this.#getChat();
         const members = [chat?.title || chat.toString()];
@@ -54,6 +75,7 @@ class Group {
             await writeFile(FILE_NAMES.GROUP_MSG, msg.join("\r\n"));
             console.log(`Можете переглянути повідомлення користувача у файлі ${FILE_NAMES.GROUP_MSG}`);
         } catch (e) {
+            console.log(e);
             console.log("Перевірьте посилання на групу або тег користувача.");
         }
     }
