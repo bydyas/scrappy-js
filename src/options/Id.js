@@ -1,9 +1,10 @@
 const { Api } = require("telegram");
-const { client } = require("../authentication");
+const uuid = require("uuid");
 const input = require("input");
 const ncp = require("copy-paste");
-const { readFile, writeFile } = require("../helpers");
+const { client } = require("../authentication");
 const { FILE_NAMES } = require("../utils/consts");
+const { readFile, saveDataLocally } = require("../helpers");
 
 class Id {
     async get(username) {
@@ -40,10 +41,7 @@ class Id {
                 }
                 username_id_data.push([id,username].join(" | @"));
             }
-
-            await writeFile(FILE_NAMES.ID_WRITE, username_id_data.join("\r\n"));
-            console.log(`Можете переглянути ID користувачів у файлі ${FILE_NAMES.ID_WRITE}`);
-
+            await saveDataLocally(username_id_data, "ID_WRITE", "Можете переглянути ID користувачів у файлі");
         } catch (e) {
             console.log(`Немає потрібного файлу (${FILE_NAMES.ID_READ}). Перевірте та спробуйте ще раз...`);
         }

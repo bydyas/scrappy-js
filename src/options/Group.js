@@ -1,9 +1,8 @@
-const { client } = require("../authentication");
-const input = require("input");
-const { writeFile, getHashFromInviteLink } = require("../helpers");
-const { FILE_NAMES } = require("../utils/consts");
-const ChannelParticipantsError = require("../errors/channelParticipantsError");
 const {Api} = require("telegram");
+const input = require("input");
+const { client } = require("../authentication");
+const { saveDataLocally, getHashFromInviteLink } = require("../helpers");
+const ChannelParticipantsError = require("../errors/channelParticipantsError");
 
 class Group {
     async #getChat() {
@@ -31,9 +30,7 @@ class Group {
                     ].join(" | "));
                 }
             }
-
-            await writeFile(FILE_NAMES.GROUP_LIST, list.join("\r\n"));
-            console.log(`Можете переглянути перелік груп у файлі ${FILE_NAMES.GROUP_LIST}`);
+            await saveDataLocally(list, "GROUP_LIST", "Можете переглянути перелік груп у файлі");
         } catch (e) {
             console.log(e)
         }
@@ -54,9 +51,7 @@ class Group {
                     "ЦЕ БОТ?: " + user.bot
                 ].join(" | "));
             }
-
-            await writeFile(FILE_NAMES.GROUP_MEMBERS, members.join("\r\n"));
-            console.log(`Можете переглянути учасників групи у файлі ${FILE_NAMES.GROUP_MEMBERS}`);
+            await saveDataLocally(members, "GROUP_MEMBERS", "Можете переглянути учасників групи у файлі");
         } catch (error) {
             ChannelParticipantsError.handle(error.errorMessage);
         }
@@ -71,11 +66,8 @@ class Group {
             for await (const message of client.iterMessages(chat,{fromUser: username.toString()})) {
                 msg.push([message.id, message?.text || "ФОТО"].join(" | "));
             }
-
-            await writeFile(FILE_NAMES.GROUP_MSG, msg.join("\r\n"));
-            console.log(`Можете переглянути повідомлення користувача у файлі ${FILE_NAMES.GROUP_MSG}`);
+            await saveDataLocally(msg, "GROUP_MSG", "Можете переглянути повідомлення користувача у файлі");
         } catch (e) {
-            console.log(e);
             console.log("Перевірьте посилання на групу або тег користувача.");
         }
     }

@@ -13,13 +13,13 @@ const getIdChoices = [
     "Повернутися"
 ];
 
-const PREFIX = "@scrappy";
-
-const FILE_NAMES = {
-    "ID_READ": "usernames.txt",
-    "ID_WRITE": `IDs${PREFIX}.txt`,
-    "GROUP_MEMBERS": `members${PREFIX}.txt`,
-    "GROUP_MSG": `messages${PREFIX}.txt`,
-    "GROUP_LIST": `groups${PREFIX}.txt`
+const FILE_NAMES = (id="", PREFIX="scrappy") => {
+    return {
+        "ID_READ": "usernames.txt",
+        "ID_WRITE": `IDs@${id}@${PREFIX}.txt`,
+        "GROUP_MEMBERS": `members@${id}@${PREFIX}.txt`,
+        "GROUP_MSG": `messages@${id}@${PREFIX}.txt`,
+        "GROUP_LIST": `groups@${id}@${PREFIX}.txt`
+    }
 }
 module.exports = { optionChoices, getIdChoices, FILE_NAMES };

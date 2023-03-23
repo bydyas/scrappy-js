@@ -1,4 +1,6 @@
 const fs = require('fs/promises');
+const {FILE_NAMES} = require("../utils/consts");
+const uuid = require("uuid");
 
 const readFile = async (filename) => {
     let data = undefined;
@@ -29,4 +31,12 @@ const getHashFromInviteLink = (link) => {
     }
 }
 
-module.exports = { readFile, writeFile, getHashFromInviteLink }
+const saveDataLocally = async (data, filenameTag, message) => {
+    const ID_LENGTH = 5;
+    const id = uuid.v4().slice(ID_LENGTH * -1);
+    const filename = FILE_NAMES(id)[filenameTag];
+    await writeFile(filename, data.join("\r\n"));
+    console.log(message + " " + filename);
+}
+
+module.exports = { readFile, writeFile, getHashFromInviteLink, saveDataLocally }
