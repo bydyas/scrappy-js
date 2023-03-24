@@ -1,3 +1,5 @@
+// Prompts templates
+
 const optionChoices = [
     "ID користувача",
     "Учасників групи",
@@ -13,13 +15,16 @@ const getIdChoices = [
     "Повернутися"
 ];
 
+// Other
+
 const FILE_NAMES = (id="", PREFIX="scrappy") => {
     return {
-        "ID_READ": "usernames.txt",
-        "ID_WRITE": `IDs@${id}@${PREFIX}.txt`,
-        "GROUP_MEMBERS": `members@${id}@${PREFIX}.txt`,
-        "GROUP_MSG": `messages@${id}@${PREFIX}.txt`,
-        "GROUP_LIST": `groups@${id}@${PREFIX}.txt`
+        "ID_READ": "1.txt",
+        "ID_WRITE": `айдішники@${id}@${PREFIX}`,
+        "GROUP_MEMBERS": `учасники@${id}@${PREFIX}`,
+        "GROUP_MSG": `повідомлення@${id}@${PREFIX}`,
+        "GROUP_LIST": `групи@${id}@${PREFIX}`
     }
 }
+
 module.exports = { optionChoices, getIdChoices, FILE_NAMES };

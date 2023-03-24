@@ -1,10 +1,9 @@
 const { Api } = require("telegram");
-const uuid = require("uuid");
 const input = require("input");
 const ncp = require("copy-paste");
 const { client } = require("../authentication");
 const { FILE_NAMES } = require("../utils/consts");
-const { readFile, saveDataLocally } = require("../helpers");
+const { readFile, saveAsCSV } = require("../helpers");
 
 class Id {
     async get(username) {
@@ -29,7 +28,7 @@ class Id {
 
     async getMany() {
         try {
-            const usernames = await readFile(FILE_NAMES.ID_READ);
+            const usernames = await readFile(FILE_NAMES().ID_READ);
             const username_id_data = [];
 
             for (let username of usernames) {
@@ -37,13 +36,16 @@ class Id {
                 try {
                     id = await this.get(username);
                 } catch (e) {
-                    id = "НЕМА";
+                    id = "НЕ ЗНАЙШОВ";
                 }
-                username_id_data.push([id,username].join(" | @"));
+                username_id_data.push({
+                    "АЙДІШКА": id,
+                    "ТЕГ": "@" + username
+                });
             }
-            await saveDataLocally(username_id_data, "ID_WRITE", "Можете переглянути ID користувачів у файлі");
+            saveAsCSV(username_id_data, "ID_WRITE", "Можете переглянути ID користувачів у файлі");
         } catch (e) {
-            console.log(`Немає потрібного файлу (${FILE_NAMES.ID_READ}). Перевірте та спробуйте ще раз...`);
+            console.log(`Немає потрібного файлу (${FILE_NAMES().ID_READ}). Перевірте та спробуйте ще раз...`);
         }
     }
 }

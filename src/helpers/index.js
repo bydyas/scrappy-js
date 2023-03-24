@@ -1,6 +1,7 @@
 const fs = require('fs/promises');
-const {FILE_NAMES} = require("../utils/consts");
 const uuid = require("uuid");
+const { stringify } = require("csv-stringify");
+const { FILE_NAMES } = require("../utils/consts");
 
 const readFile = async (filename) => {
     let data = undefined;
@@ -31,12 +32,17 @@ const getHashFromInviteLink = (link) => {
     }
 }
 
-const saveDataLocally = async (data, filenameTag, message) => {
+const saveAsCSV = (data=[], filenameTag, message) => {
     const ID_LENGTH = 5;
     const id = uuid.v4().slice(ID_LENGTH * -1);
-    const filename = FILE_NAMES(id)[filenameTag];
-    await writeFile(filename, data.join("\r\n"));
-    console.log(message + " " + filename);
+    const filename = FILE_NAMES(id)[filenameTag] + ".csv";
+
+    stringify(data, {
+        header: true
+    }, async (err, output) => {
+        await fs.writeFile(filename, output);
+        console.log(message + " " + filename);
+    })
 }
 
-module.exports = { readFile, writeFile, getHashFromInviteLink, saveDataLocally }
+module.exports = { readFile, writeFile, getHashFromInviteLink, saveAsCSV }

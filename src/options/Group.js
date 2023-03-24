@@ -1,7 +1,7 @@
 const {Api} = require("telegram");
 const input = require("input");
 const { client } = require("../authentication");
-const { saveDataLocally, getHashFromInviteLink } = require("../helpers");
+const { getHashFromInviteLink, saveAsCSV } = require("../helpers");
 const ChannelParticipantsError = require("../errors/channelParticipantsError");
 
 class Group {
@@ -23,14 +23,16 @@ class Group {
         try {
             for await (const dialog of client.iterDialogs({})){
                 if (!dialog.entity.left & dialog.entity.participantsCount > 0 & dialog.isGroup) {
-                    list.push([
-                        "ID: " + dialog.id,
-                        "НАЗВА: " + dialog.title,
-                        "ЛЮДІ: " + dialog.entity.participantsCount
-                    ].join(" | "));
+                    list.push(
+                        {
+                            "АЙДІШКА": dialog.id,
+                            "НАЗВА": dialog.title,
+                            "ЛЮДІ": dialog.entity.participantsCount
+                        }
+                    );
                 }
             }
-            await saveDataLocally(list, "GROUP_LIST", "Можете переглянути перелік груп у файлі");
+            saveAsCSV(list, "GROUP_LIST", "Можете переглянути перелік груп у файлі");
         } catch (e) {
             console.log(e)
         }
@@ -38,20 +40,21 @@ class Group {
 
     async getMembers() {
         const chat = await this.#getChat();
-        const members = [chat?.title || chat.toString()];
+        const members = [];
 
         try {
             for await (const user of client.iterParticipants(chat)){
-                members.push([
-                    "ID: "+ Number(user.id),
-                    "@" + user.username,
-                    "ІМ*Я: " + user.firstName,
-                    "ПРІЗВИЩЕ: " + user.lastName,
-                    "МОБ: " + user.phone,
-                    "ЦЕ БОТ?: " + user.bot
-                ].join(" | "));
+                members.push({
+                    "АЙДІШКА": Number(user.id),
+                    "ТЕГ": user.username,
+                    "ІМ*Я": user.firstName,
+                    "ПРІЗВИЩЕ": user.lastName,
+                    "МОБ": user.phone,
+                    "ЦЕ БОТ?": user.bot ? "Так" : "Ні"
+                });
             }
-            await saveDataLocally(members, "GROUP_MEMBERS", "Можете переглянути учасників групи у файлі");
+
+            saveAsCSV(members, "GROUP_MEMBERS", "Можете переглянути учасників групи у файлі")
         } catch (error) {
             ChannelParticipantsError.handle(error.errorMessage);
         }
@@ -60,13 +63,18 @@ class Group {
     async getMessages() {
         const chat = await this.#getChat();
         const username = await input.text("Введіть тег користувача: ");
+        const messages = [];
 
         try {
-            const msg = [`Група: ${chat?.title || chat.toString()} | Користувач: ${username}`];
             for await (const message of client.iterMessages(chat,{fromUser: username.toString()})) {
-                msg.push([message.id, message?.text || "ФОТО"].join(" | "));
+                messages.push(
+                    {
+                        "АЙДІШКА": message.id,
+                        "ПОВІДОМЛЕННЯ": message?.text || "[ФОТО]"
+                    }
+                );
             }
-            await saveDataLocally(msg, "GROUP_MSG", "Можете переглянути повідомлення користувача у файлі");
+            saveAsCSV(messages, "GROUP_MSG", "Можете переглянути повідомлення користувача у файлі");
         } catch (e) {
             console.log("Перевірьте посилання на групу або тег користувача.");
         }
