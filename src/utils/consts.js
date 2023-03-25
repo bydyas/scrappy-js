@@ -5,6 +5,7 @@ const optionChoices = [
     "Учасників групи",
     "Повідомлення користувача",
     "Перелік доступних груп",
+    "Запросити користувачів до групи",
     "Вийти з облікового запису",
     "Вийти"
 ];
@@ -20,6 +21,7 @@ const getIdChoices = [
 const FILE_NAMES = (id="", PREFIX="scrappy") => {
     return {
         "ID_READ": "1.txt",
+        "INVITE_READ": "1.txt",
         "ID_WRITE": `айдішники@${id}@${PREFIX}`,
         "GROUP_MEMBERS": `учасники@${id}@${PREFIX}`,
         "GROUP_MSG": `повідомлення@${id}@${PREFIX}`,

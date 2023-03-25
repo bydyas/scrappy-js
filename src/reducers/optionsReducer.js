@@ -8,7 +8,7 @@ const optionsReducer = async (option) => {
     switch (option) {
         case optionChoices[0]:
             await getIdReducer();
-            await callOptionsReducer(true, 2500);
+            await callOptionsReducer(true);
             break;
         case optionChoices[1]:
             await Group.getMembers();
@@ -22,6 +22,10 @@ const optionsReducer = async (option) => {
             await Group.getList();
             await callOptionsReducer(true);
             break;
+        case optionChoices[4]:
+            await Group.inviteUsers();
+            await callOptionsReducer(true);
+            break;
         case optionChoices[optionChoices.length-2]:
             await logOut();
             break;
@@ -33,7 +37,7 @@ const optionsReducer = async (option) => {
     }
 };
 
-const callOptionsReducer = async (delay=false, ms=2000) => {
+const callOptionsReducer = async (delay=false, ms=2500) => {
 
     const IMMEDIATELY_CALL_TIME = 0;
 

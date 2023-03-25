@@ -1,8 +1,10 @@
 const {Api} = require("telegram");
 const input = require("input");
 const { client } = require("../authentication");
-const { getHashFromInviteLink, saveAsCSV } = require("../helpers");
+const { FILE_NAMES } = require("../utils/consts");
+const { getHashFromInviteLink, saveAsCSV, readFile } = require("../helpers");
 const ChannelParticipantsError = require("../errors/channelParticipantsError");
+const InviteToChannelError = require("../errors/inviteToChannelError");
 
 class Group {
     async #getChat() {
@@ -77,6 +79,24 @@ class Group {
             saveAsCSV(messages, "GROUP_MSG", "Можете переглянути повідомлення користувача у файлі");
         } catch (e) {
             console.log("Перевірьте посилання на групу або тег користувача.");
+        }
+    }
+
+    async inviteUsers() {
+        const chat = await this.#getChat();
+        const usersList = await readFile(FILE_NAMES().INVITE_READ);
+        await client.connect();
+
+        try {
+            const { chats } = await client.invoke(
+                new Api.channels.InviteToChannel({
+                    channel: chat,
+                    users: usersList,
+                })
+            );
+            console.log(`Користувачі були успішно додані до групи/каналу (${chats[0].title})`);
+        } catch (error) {
+            InviteToChannelError.handle(error.errorMessage);
         }
     }
 }

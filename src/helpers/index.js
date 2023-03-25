@@ -7,8 +7,10 @@ const readFile = async (filename) => {
     let data = undefined;
     try {
         data = await fs.readFile(filename, { encoding: 'utf8' });
-    } catch (e) {
-        throw e;
+    } catch (err) {
+        if (err.code === "ENOENT") {
+            return console.log(`Не знайшов потрібний файл (${filename})`);
+        }
     }
     return data?.split(/\r?\n/);
 }
