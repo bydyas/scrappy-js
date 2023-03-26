@@ -1,12 +1,14 @@
 require("dotenv").config();
 const { authorize } = require("./src/authentication");
 const { callOptionsReducer } = require("./src/reducers/optionsReducer");
+const { beautifyCli } = require("./src/cli");
 
 (async () => {
-   try {
+    beautifyCli();
+    try {
        await authorize();
        await callOptionsReducer();
-   } catch (e) {
-       console.log(e);
-   }
+    } catch (err) {
+       console.log(err);
+    }
 })()

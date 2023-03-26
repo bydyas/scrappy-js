@@ -16,7 +16,14 @@ const getIdChoices = [
     "Повернутися"
 ];
 
-// Other
+// Custom CLI
+
+const CLI = {
+    "TERMINAL_TITLE": "Scrappy",
+    "ASCII_OUTPUT": "SCRAPPY"
+}
+
+// Read & Write files
 
 const FILE_NAMES = (id="", PREFIX="scrappy") => {
     return {
@@ -29,4 +36,4 @@ const FILE_NAMES = (id="", PREFIX="scrappy") => {
     }
 }
 
-module.exports = { optionChoices, getIdChoices, FILE_NAMES };
+module.exports = { optionChoices, getIdChoices, FILE_NAMES, CLI };
