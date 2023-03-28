@@ -16,6 +16,11 @@ const getIdChoices = [
     "Повернутися"
 ];
 
+const getMessagesChoices = [
+  "Повідомлення із групи",
+  "Тотально усі повідомлення"
+];
+
 // Custom CLI
 
 const CLI = {
@@ -36,4 +41,10 @@ const FILE_NAMES = (id="", PREFIX="scrappy") => {
     }
 }
 
-module.exports = { optionChoices, getIdChoices, FILE_NAMES, CLI };
+module.exports = {
+    optionChoices,
+    getIdChoices,
+    getMessagesChoices,
+    FILE_NAMES,
+    CLI
+};

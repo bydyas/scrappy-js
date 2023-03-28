@@ -19,7 +19,7 @@ class Group {
         }
     }
 
-    async getList() {
+    async #getGroupsList() {
         const list = [];
 
         try {
@@ -34,10 +34,38 @@ class Group {
                     );
                 }
             }
-            saveAsCSV(list, "GROUP_LIST", "Можете переглянути перелік груп у файлі");
         } catch (e) {
             console.log(e)
         }
+
+        return list;
+    }
+
+    async #getMessagesList(group, user) {
+        const chat = group || await this.#getChat();
+        const username = user || await input.text("Введіть тег користувача: ");
+        const messages = [];
+
+        try {
+            for await (const message of client.iterMessages(chat,{fromUser: username.toString()})) {
+                messages.push(
+                    {
+                        "АЙДІШКА": message.id,
+                        "ПОВІДОМЛЕННЯ": message?.text || "[ФОТО]"
+                    }
+                );
+            }
+        } catch (e) {
+            console.log("Перевірьте посилання на групу або тег користувача.");
+        }
+
+        return messages;
+    }
+
+    async getGroupsListAndSaveIt() {
+        console.log("Шукаю...")
+        const list = await this.#getGroupsList();
+        saveAsCSV(list, "GROUP_LIST", "Можете переглянути перелік груп у файлі");
     }
 
     async getMembers() {
@@ -62,23 +90,16 @@ class Group {
         }
     }
 
-    async getMessages() {
-        const chat = await this.#getChat();
-        const username = await input.text("Введіть тег користувача: ");
-        const messages = [];
+    async getMessagesListAndSaveIt(group, user) {
+        const messages = await this.#getMessagesList(group, user);
+        saveAsCSV(messages, "GROUP_MSG", "Можете переглянути повідомлення користувача у файлі");
+    }
 
-        try {
-            for await (const message of client.iterMessages(chat,{fromUser: username.toString()})) {
-                messages.push(
-                    {
-                        "АЙДІШКА": message.id,
-                        "ПОВІДОМЛЕННЯ": message?.text || "[ФОТО]"
-                    }
-                );
-            }
-            saveAsCSV(messages, "GROUP_MSG", "Можете переглянути повідомлення користувача у файлі");
-        } catch (e) {
-            console.log("Перевірьте посилання на групу або тег користувача.");
+    async getAllMessages() {
+        const groups = await this.#getGroupsList();
+
+        for (const group of groups) {
+            await this.getMessagesListAndSaveIt(group["АЙДІШКА"], "me");
         }
     }
 

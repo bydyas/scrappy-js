@@ -2,6 +2,7 @@ const { optionChoices } = require("../utils/consts");
 const promptOptions = require("../prompts/options.prompt");
 const logOut = require("../options/logOut");
 const getIdReducer = require("./getIdReducer");
+const getMessagesReducer = require("./getMessagesReducer")
 const Group = require("../options/Group");
 
 const optionsReducer = async (option) => {
@@ -15,11 +16,11 @@ const optionsReducer = async (option) => {
             await callOptionsReducer(true);
             break;
         case optionChoices[2]:
-            await Group.getMessages();
+            await getMessagesReducer();
             await callOptionsReducer(true);
             break;
         case optionChoices[3]:
-            await Group.getList();
+            await Group.getGroupsListAndSaveIt();
             await callOptionsReducer(true);
             break;
         case optionChoices[4]:
