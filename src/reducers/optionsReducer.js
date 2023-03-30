@@ -12,7 +12,7 @@ const optionsReducer = async (option) => {
             await callOptionsReducer(true);
             break;
         case optionChoices[1]:
-            await Group.getMembers();
+            await Group.getMembersListAndSaveIt();
             await callOptionsReducer(true);
             break;
         case optionChoices[2]:

@@ -34,6 +34,16 @@ const getHashFromInviteLink = (link) => {
     }
 }
 
+const extractTelegramUsername = (link) => {
+    const match = link.match(/https?:\/\/t\.me\/(.+)/i);
+
+    if (match && match[1]) {
+        return match[1];
+    } else {
+        return link;
+    }
+}
+
 const saveAsCSV = (data=[], filenameTag, message) => {
     const ID_LENGTH = 5;
     const id = uuid.v4().slice(ID_LENGTH * -1);
@@ -47,4 +57,10 @@ const saveAsCSV = (data=[], filenameTag, message) => {
     })
 }
 
-module.exports = { readFile, writeFile, getHashFromInviteLink, saveAsCSV }
+module.exports = {
+    readFile,
+    writeFile,
+    getHashFromInviteLink,
+    saveAsCSV,
+    extractTelegramUsername
+}
