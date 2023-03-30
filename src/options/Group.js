@@ -119,11 +119,16 @@ class Group {
             if (isThatUserHere) groupsWithUsername.push(group["АЙДІШКА"]);
         }
 
+        const allMessages = [];
+
         if (groupsWithUsername) {
             for (const groupId of groupsWithUsername) {
-                await this.getMessagesListAndSaveIt(groupId, username);
+                const messageBlock = await this.#getMessagesList(groupId, username);
+                allMessages.push(...messageBlock);
             }
         }
+
+        saveAsCSV(allMessages, "GROUP_MSG", "Можете переглянути повідомлення користувача у файлі");
     }
 
     async inviteUsers() {
