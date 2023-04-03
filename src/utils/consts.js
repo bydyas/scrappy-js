@@ -18,7 +18,7 @@ const getIdChoices = [
 
 const getMessagesChoices = [
   "Повідомлення із групи",
-  "Тотально усі повідомлення"
+  "Тотально усі повідомлення (через файл)"
 ];
 
 // Custom CLI
@@ -30,14 +30,14 @@ const CLI = {
 
 // Read & Write files
 
-const FILE_NAMES = (id="", PREFIX="scrappy") => {
+const FILE_NAMES = (id="", username="",  PREFIX="scrappy") => {
     return {
         "ID_READ": "1.txt",
         "INVITE_READ": "1.txt",
-        "ID_WRITE": `айдішники@${id}@${PREFIX}`,
-        "GROUP_MEMBERS": `учасники@${id}@${PREFIX}`,
-        "GROUP_MSG": `повідомлення@${id}@${PREFIX}`,
-        "GROUP_LIST": `групи@${id}@${PREFIX}`
+        "ID_WRITE": `_айдішники@${id}@${PREFIX}`,
+        "GROUP_MEMBERS": `_учасники@${id}@${PREFIX}`,
+        "GROUP_MSG": `${username}_повідомлення@${id}@${PREFIX}`,
+        "GROUP_LIST": `_групи@${id}@${PREFIX}`
     }
 }
 

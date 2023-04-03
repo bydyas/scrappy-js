@@ -2,7 +2,7 @@ const {Api} = require("telegram");
 const input = require("input");
 const { client } = require("../authentication");
 const { FILE_NAMES } = require("../utils/consts");
-const { getHashFromInviteLink, saveAsCSV, readFile, extractTelegramUsername } = require("../helpers");
+const { getHashFromInviteLink, saveAsCSV, readFile, extractTelegramUsername, getGroupsListFromTXT } = require("../helpers");
 const ChannelParticipantsError = require("../errors/channelParticipantsError");
 const InviteToChannelError = require("../errors/inviteToChannelError");
 
@@ -24,7 +24,7 @@ class Group {
 
         try {
             for await (const dialog of client.iterDialogs({})){
-                if (!dialog.entity.left & dialog.entity.participantsCount > 0 & dialog.isGroup) {
+                if (!dialog.entity.left & dialog.entity.participantsCount > 0 && dialog.isGroup) {
                     list.push(
                         {
                             "АЙДІШКА": dialog.id,
@@ -63,7 +63,7 @@ class Group {
         return members;
     }
 
-    async #getMessagesList(group, user) {
+    async #getMessagesList(group, user, optionalGroupTitle) {
         const chat = group || await this.#getChat();
         const username = user || await input.text("Введіть тег користувача: ");
         const messages = [];
@@ -72,9 +72,11 @@ class Group {
             for await (const message of client.iterMessages(chat,{fromUser: username.toString()})) {
                 messages.push(
                     {
-                        "ГРУПА": chat?.title || chat.toString(),
-                        "АЙДІШКА": message.id,
-                        "ПОВІДОМЛЕННЯ": message?.text || "[ФОТО]"
+                        "ГРУПА": optionalGroupTitle || chat?.title || chat.toString(),
+                        "КОРИСТУВАЧ": username,
+                        "АЙДІШКА ПОВІДОМЛЕННЯ": message.id,
+                        "ТЕКСТ ПОВІДОМЛЕННЯ": message?.text || "[ФОТО]",
+                        "ДАТА": new Date(message.date).toLocaleString()
                     }
                 );
             }
@@ -101,34 +103,46 @@ class Group {
         saveAsCSV(messages, "GROUP_MSG", "Можете переглянути повідомлення користувача у файлі");
     }
 
-    async getAllMessages() {
+    async getAllMessages(groupsByFile=true) {
+        let iterator = 0;
+        let filename = await input.text("Введіть назву TXT файла: ")
         let username = await input.text("Введіть тег користувача: ");
         username = extractTelegramUsername(username);
         if (!username) return;
 
-        let groups = await this.#getGroupsList();
-        groups = groups.sort((a,b) => a["ЛЮДИ"] - b["ЛЮДИ"]);
-
-        const groupsWithUsername = [];
+        let groups;
+        if (!groupsByFile) {
+            groups = await this.#getGroupsList();
+            groups = groups.sort((a,b) => a["ЛЮДИ"] - b["ЛЮДИ"]);
+        } else {
+            groups = await getGroupsListFromTXT(filename + ".txt");
+        }
 
         console.log("Шукаю...");
 
-        for (const group of groups) {
-            const members = await this.#getMembersList(group["АЙДІШКА"]);
-            const isThatUserHere = !!members.find(obj => obj["ТЕГ"] === username)
-            if (isThatUserHere) groupsWithUsername.push(group["АЙДІШКА"]);
+        let groupsWithUsername = [];
+        if (!groupsByFile) {
+            for (const group of groups) {
+                const members = await this.#getMembersList(group["АЙДІШКА"]);
+                console.log(members)
+                const isThatUserHere = !!members.find(obj => obj["ТЕГ"] === username)
+                if (isThatUserHere) groupsWithUsername.push({"АЙДІШКА": group["АЙДІШКА"], "НАЗВА": group["НАЗВА"]});
+            }
+        } else {
+            groupsWithUsername = groups;
         }
 
         const allMessages = [];
-
         if (groupsWithUsername) {
-            for (const groupId of groupsWithUsername) {
-                const messageBlock = await this.#getMessagesList(groupId, username);
+            for (const group of groupsWithUsername) {
+                const messageBlock = await this.#getMessagesList(group["АЙДІШКА"], username, group["НАЗВА"]);
+                if (messageBlock.length > 0) iterator++;
                 allMessages.push(...messageBlock);
             }
         }
 
-        saveAsCSV(allMessages, "GROUP_MSG", "Можете переглянути повідомлення користувача у файлі");
+        console.log("Успішно перевірено груп: " + iterator);
+        saveAsCSV(allMessages, "GROUP_MSG", "Можете переглянути повідомлення користувача у файлі", username);
     }
 
     async inviteUsers() {

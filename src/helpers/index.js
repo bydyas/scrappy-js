@@ -44,10 +44,10 @@ const extractTelegramUsername = (link) => {
     }
 }
 
-const saveAsCSV = (data=[], filenameTag, message) => {
+const saveAsCSV = (data=[], filenameTag, message, username) => {
     const ID_LENGTH = 5;
     const id = uuid.v4().slice(ID_LENGTH * -1);
-    const filename = FILE_NAMES(id)[filenameTag] + ".csv";
+    const filename = FILE_NAMES(id, username)[filenameTag] + ".csv";
 
     stringify(data, {
         header: true
@@ -57,10 +57,26 @@ const saveAsCSV = (data=[], filenameTag, message) => {
     })
 }
 
+const formatAsTGGroupLink = (str) => {
+    const LINK_FORMAT = "https://t.me/";
+    if (str[0] = "@") str = str.slice(1);
+    return LINK_FORMAT+str;
+}
+
+const getGroupsListFromTXT = async (filename) => {
+    let data = await readFile(filename);
+    data = data.map(line=> {
+        line = line.split(" ")
+        return {"АЙДІШКА": formatAsTGGroupLink(line[2]), "НАЗВА": line[2]};
+    });
+    return data;
+}
+
 module.exports = {
     readFile,
     writeFile,
     getHashFromInviteLink,
     saveAsCSV,
-    extractTelegramUsername
+    extractTelegramUsername,
+    getGroupsListFromTXT
 }
