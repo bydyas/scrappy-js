@@ -3,8 +3,8 @@ const { StoreSession } = require("telegram/sessions");
 const input = require("input");
 const os = require("os")
 
-const apiId = +process.env.SCRAPPY_APP_ID
-const apiHash = process.env.SCRAPPY_API_HASH;
+const apiId = 26430196//process.env.SCRAPPY_APP_ID
+const apiHash = "2d813a65694c3dfbd9fc857373fbb238"//process.env.SCRAPPY_API_HASH;
 const storeSession = new StoreSession('./my_session');
 
 const client_options = {

@@ -60,14 +60,14 @@ const saveAsCSV = (data=[], filenameTag, message, username) => {
 const formatAsTGGroupLink = (str) => {
     const LINK_FORMAT = "https://t.me/";
     if (str[0] = "@") str = str.slice(1);
-    return LINK_FORMAT+str;
+    return LINK_FORMAT+str.trim();
 }
 
 const getGroupsListFromTXT = async (filename) => {
     let data = await readFile(filename);
     data = data.map(line=> {
         line = line.split(" ")
-        return {"АЙДІШКА": formatAsTGGroupLink(line[2]), "НАЗВА": line[2]};
+        return {"АЙДІШКА": formatAsTGGroupLink(line[1]), "НАЗВА": line[2]};
     });
     return data;
 }
