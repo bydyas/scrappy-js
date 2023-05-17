@@ -1,4 +1,5 @@
 # **scrappy-js**
+A simple app using TelegramApi to parse its messages, group members, user id etc.
 
 - Migrated from [Scrappy](https://github.com/bydyas/scrappy)(Python version using Telethon). 
 - Based on [GramJS](https://github.com/gram-js/gramjs)
